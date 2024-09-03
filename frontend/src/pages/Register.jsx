@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     firstname: "",
     lastname: "",
@@ -16,6 +17,8 @@ const Register = () => {
   }
 
   async function register() {
+    // additional validate the inputs
+
     try {
       const response = await fetch("http://localhost:1099/register", {
         method: "POST",
@@ -32,13 +35,15 @@ const Register = () => {
 
       if (response.ok) {
         const responseData = await response.json();
+        navigate("/login");
         console.log(responseData);
       } else {
         const errorData = await response.json();
-        setError(`Error: ${errorData.message || "Registration failed"}`);
+        setError(true);
+        //handle error and show it to the user
       }
     } catch (err) {
-      setError(`Network Error: ${err.message}`);
+      setError(true);
     }
   }
 
