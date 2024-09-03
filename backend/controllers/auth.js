@@ -4,11 +4,11 @@ import bcrypt from "bcrypt";
 
 const saltRounds = 10;
 
-function generateToken(username) {
+function generateToken(userid) {
   if (!process.env.TOKEN_KEY) {
     throw new Error("TOKEN_KEY environment variable is not defined");
   }
-  return jwt.sign({ username }, process.env.TOKEN_KEY, { expiresIn: "1h" });
+  return jwt.sign({ userid }, process.env.TOKEN_KEY, { expiresIn: "1h" });
 }
 
 export const loginController = (req, res) => {
@@ -31,13 +31,14 @@ export const loginController = (req, res) => {
     }
 
     const user = results[0];
-    const match = await bcrypt.compare(password, user.password);
+    const match = await bcrypt.compare(req.body.password, user.password);
 
     if (!match) {
       return res.status(401).json({ message: "Incorrect password" });
     }
 
-    const token = generateToken(userName);
+    console.log(user.userId);
+    const token = generateToken(user.userId);
     const { password, ...userInfo } = user;
 
     res.cookie("token", token, { httpOnly: true, secure: true });

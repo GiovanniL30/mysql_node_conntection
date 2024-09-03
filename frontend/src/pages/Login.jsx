@@ -3,13 +3,42 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [data, setData] = useState({ username: "", password: "" });
+  const [error, setError] = useState(false);
 
   function onChange(e) {
     const { value, name } = e.target;
     setData((prev) => ({ ...prev, [name]: value }));
   }
 
-  function login() {}
+  async function login() {
+    // additional validate the inputs
+
+    try {
+      const response = await fetch("http://localhost:1099/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          password: data.password,
+          userName: data.username,
+        }),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log(responseData);
+      } else {
+        const errorData = await response.json();
+        setError(true);
+        console.log(errorData);
+        //handle error and show it to the user
+      }
+    } catch (err) {
+      setError(true);
+    }
+  }
+
   return (
     <div className="padding-x">
       <div className="max-container">

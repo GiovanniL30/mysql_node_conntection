@@ -40,6 +40,7 @@ const Register = () => {
       } else {
         const errorData = await response.json();
         setError(true);
+        console.log(errorData);
         //handle error and show it to the user
       }
     } catch (err) {
