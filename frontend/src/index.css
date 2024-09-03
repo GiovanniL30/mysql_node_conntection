@@ -9,6 +9,33 @@
   scroll-behavior: smooth;
 }
 
+.floating-label-wrapper {
+  position: relative;
+}
+
+.floating-label {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  background: white;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  color: #6b7280;
+}
+
+.floating-label-wrapper input:focus + .floating-label,
+.floating-label-wrapper input:not(:placeholder-shown) + .floating-label {
+  top: 0;
+  left: 1rem;
+  font-size: 0.75rem;
+  color: #374151;
+}
+
+.floating-label-wrapper input::placeholder {
+  color: transparent;
+}
+
 @layer components {
   .max-container {
     max-width: 1300px;
