@@ -1,9 +1,16 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import {
+  NavLink,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 
 const Login = () => {
   const [data, setData] = useState({ username: "", password: "" });
   const [error, setError] = useState(false);
+  const [params, setParams] = useSearchParams();
+  const navigate = useNavigate();
 
   function onChange(e) {
     const { value, name } = e.target;
@@ -27,7 +34,8 @@ const Login = () => {
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log(responseData);
+        localStorage.setItem("user", JSON.stringify(responseData));
+        navigate("/products");
       } else {
         const errorData = await response.json();
         setError(true);
@@ -43,6 +51,7 @@ const Login = () => {
     <div className="padding-x">
       <div className="max-container">
         <div className="flex flex-col items-center h-screen justify-center">
+          {params.get("message") && <p>{params.get("message")}</p>}
           <h1 className="text-center font-bold text-3xl">Login</h1>
           <form className="flex flex-col gap-y-5 max-w-[600px] w-full mt-5">
             <div className="floating-label-wrapper">

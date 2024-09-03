@@ -12,6 +12,7 @@ app.use(cookieParser());
 app.use("/", authRoute);
 
 app.get("/products", authenticateCookie, (req, res) => {
+  console.log({ ...req.user });
   res.status(200).json({ ...req.user });
 });
 
